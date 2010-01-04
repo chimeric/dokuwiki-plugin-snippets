@@ -15,20 +15,6 @@ require_once(DOKU_PLUGIN.'syntax.php');
  */
 class syntax_plugin_snippets extends DokuWiki_Syntax_Plugin {
 
-    /**
-     * return some info
-     */
-    function getInfo(){
-      return array(
-        'author' => 'Michael Klier',
-        'email'  => 'chi@chimeric.de',
-        'date'   => @file_get_contents(DOKU_PLUGIN . 'snippets/VERSION'),
-        'name'   => 'Snippets Plugin (Syntax Component)',
-        'desc'   => 'Provides a toolbar button+popup for nice template insertion',
-        'url'    => 'http://dokuwiki.org/plugin:snippets',
-      );
-    }
-
     function getType(){ return 'protected';}
     function getAllowedTypes() { return array('container','substition','protected','disabled','formatting','paragraphs'); }
     function getPType(){ return 'block';}

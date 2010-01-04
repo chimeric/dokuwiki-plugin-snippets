@@ -14,20 +14,6 @@ require_once(DOKU_PLUGIN.'action.php');
 class action_plugin_snippets extends DokuWiki_Action_Plugin {
 
     /**
-     * Return some info
-     */
-    function getInfo() {
-        return array(
-                'author' => 'Michael Klier',
-                'email'  => 'chi@chimeric.de',
-                'date'   => @file_get_contents(DOKU_PLUGIN . 'snippets/VERSION'),
-                'name'   => 'Snippets Plugin (Action Component)',
-                'desc'   => 'Provides a toolbar button+popup for nice template insertion',
-                'url'    => 'http://dokuwiki.org/plugin:snippets',
-                );
-    }
-
-    /**
      * Register callbacks
      */
     function register(&$controller) {
