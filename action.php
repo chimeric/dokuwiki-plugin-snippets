@@ -42,10 +42,11 @@ class action_plugin_snippets extends DokuWiki_Action_Plugin {
      */
     function handle_toolbar_define(&$event, $param) {
         if(!page_exists($this->getConf('snippets_page'))) return;
+
         $item = array(
                 'type' => 'mediapopup',
                 'title' => $this->getLang('gb_snippets'),
-                'icon' => DOKU_BASE . 'lib/plugins/snippets/images/icon.png',
+                'icon' => '../../plugins/snippets/images/icon.png',
                 'url' => 'lib/plugins/snippets/exe/snippets.php?ns=',
                 'name' => 'snippets',
                 'options' => 'width=800,height=500,left=20,top=20,scrollbars=no,resizable=yes'
