@@ -29,20 +29,19 @@ div.dokuwiki div#plugin_snippets__idx ul {
   float: left;
   width: 95%;
 }
-
 div.dokuwiki div#plugin_snippets__idx ul ul {
   width: 260px;
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 div.dokuwiki div#plugin_snippets__idx ul ul ul {
   width: 250px;
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 div.dokuwiki div#plugin_snippets__idx ul ul ul ul {
   width: 240px;
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 div.dokuwiki div#plugin_snippets__idx ul ul li,
@@ -63,21 +62,22 @@ div.dokuwiki div#plugin_snippets__idx li span {
 }
 
 div.dokuwiki div#plugin_snippets__idx div.li {
-  padding: 0.2em;
+  padding: 0.2em 0.2em 0.2em 22px;
   float: left;
   font-weight: bold;
 }
 
+div#plugin_snippets__idx div {
+  background: url(images/blank.png) no-repeat 3px 4px;
+  width: 98%;
+}
+
 div.dokuwiki div#plugin_snippets__idx div.open {
   background: url(images/close.png) no-repeat 3px 4px;
-  padding-left: 22px;
-  width: 98%;
 }
 
 div.dokuwiki div#plugin_snippets__idx div.closed {
   background: url(images/open.png) no-repeat 3px 4px;
-  padding-left: 22px;
-  width: 98%;
 }
 
 div.dokuwiki div#plugin_snippets__idx a.plugin_snippets_preview,
