@@ -8,11 +8,11 @@ snippets = {
 
     // Attach all events to elements
     attach: function(obj) {
-        if(!obj) return;
-        if(!opener) return;
+        if(!obj) { return; }
+        if(!opener) { return; }
 
         // add keepopen checkbox
-        var opts = $('plugin_snippets__opts');
+        var opts = jQuery('#plugin_snippets__opts');
         if(opts) {
             var kobox  = document.createElement('input');
             kobox.type = 'checkbox';
@@ -20,10 +20,11 @@ snippets = {
             if(DokuCookie.getValue('snippets_keepopen')){
                 kobox.checked  = true;
                 kobox.defaultChecked = true; //IE wants this
-                media.keepopen = true;
+                snippets.keepopen = true;
             }
-            addEvent(kobox, 'click', function(event){
-                snippets.togglekeepopen(this); });
+            jQuery(kobox).bind('click', function(event){
+                snippets.togglekeepopen(this); }
+            );
 
             var kolbl       = document.createElement('label');
             kolbl.htmlFor   = 'snippets__keepopen';
@@ -31,13 +32,13 @@ snippets = {
 
             var kobr = document.createElement('br');
 
-            opts.appendChild(kobox);
-            opts.appendChild(kolbl);
-            opts.appendChild(kobr);
+            opts.append(kobox);
+            opts.append(kolbl);
+            opts.append(kobr);
         }
 
         // attach events
-        links = getElementsByClass('wikilink1', obj, 'a');
+        links = jQuery(obj).find('a.wikilink1');
         if(links) {
             for(var i = 0; i < links.length; i ++) {
                 link = links[i];
@@ -52,29 +53,30 @@ snippets = {
                 preview.className = 'plugin_snippets_preview';
                 preview.title = LANG['plugins']['snippets']['preview'];
                 preview.href = page;
-                addEvent(preview, 'click', function(event) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    snippets.preview(this.href); 
-                    return false; });
+
+                jQuery(preview).bind('click', {'page': page}, function(event) {
+                    snippets.preview(event.data.page);
+                    return false;
+                });
                 div.appendChild(preview);
 
                 insert = document.createElement('a');
                 insert.className = 'plugin_snippets_insert';
                 insert.title = LANG['plugins']['snippets']['insert'];
                 insert.href = page;
-                addEvent(insert, 'click', function(event) { 
-                    event.preventDefault();
-                    event.stopPropagation();
-                    snippets.insert(this.href); 
-                    return false; });
+
+                jQuery(insert).bind('click', {'page': page}, function(event) {
+                    snippets.insert(event.data.page);
+                    return false;
+                });
+
                 div.appendChild(insert);
                 div.appendChild(span);
             }
         }
 
         // strip out links to non-existing pages
-        links = getElementsByClass('wikilink2', obj, 'a');
+        links = jQuery(obj).find('a.wikilink2');
         if(links) {
             for(var i = 0; i < links.length; i ++) {
                 link = links[i];
@@ -87,7 +89,7 @@ snippets = {
         }
 
         // add toggle to sub lists
-        lists = obj.getElementsByTagName('ul');
+        lists = jQuery(obj).find('ul');
         if(lists) {
             for(var i = 1; i < lists.length; i++) {
             list = lists[i];
@@ -98,7 +100,7 @@ snippets = {
                     div = div.previousSibling;
                 }
                 div.className = 'li closed';
-                addEvent(div, 'click', function(event) { snippets.toggle(this); });
+                jQuery(div).bind('click', function(event) { snippets.toggle(this); });
             }
         }
     },
@@ -137,25 +139,20 @@ snippets = {
 
     // perform AJAX preview
     preview: function(page) {
-        preview = $('plugin_snippets__preview');
+        preview = jQuery('#plugin_snippets__preview');
         if(!preview) return;
 
-        preview.innerHTML = '<img src="'+DOKU_BASE+'/lib/images/throbber.gif" />';
+        preview.html('<img src="' + DOKU_BASE + 'lib/images/throbber.gif" />');
 
-        var ajax = new sack(DOKU_BASE+'lib/exe/ajax.php');
-        ajax.AjaxFailedAlert = '';
-        ajax.encodeURIString = false;
-        
-        ajax.setVar('call', 'snippet_preview');
-        ajax.setVar('id', page);
+        jQuery.post(
+            DOKU_BASE+'lib/exe/ajax.php',
+            { call: 'snippet_preview', id: page },
+            function(data){
+                if(data === '') return;
+                preview.html(data);
+            }
+        );
 
-        ajax.onCompletion = function(){
-            var data = this.response;
-            if(data === '') return;
-            preview.innerHTML = data;
-        };
-    
-        ajax.runAJAX();
         return false;
     },
 
@@ -163,30 +160,24 @@ snippets = {
     insert: function(page) {
         if(!opener) return;
 
-        var ajax = new sack(DOKU_BASE+'lib/exe/ajax.php');
-        ajax.AjaxFailedAlert = '';
-        ajax.encodeURIString = false;
-        
-        ajax.setVar('call', 'snippet_insert');
-        ajax.setVar('id', page);
-
-        ajax.onCompletion = function(){
-            var data = this.response;
-            opener.insertAtCarret('wiki__text', data, '');
-            if(!snippets.keepopen) { 
-                window.close();
+        jQuery.post(
+            DOKU_BASE+'lib/exe/ajax.php',
+            { call: 'snippet_insert', id: page },
+            function(data){
+                opener.insertAtCarret('wiki__text', data, '');
+                if(!snippets.keepopen) {
+                    window.close();
+                }
+                opener.focus();
             }
-            opener.focus();
-        };
-    
-        ajax.runAJAX();
+        );
         return false;
     }
 };
 
-addInitEvent(function(){
-    var idx = $('plugin_snippets__idx');
-    if(!idx) return;
+jQuery(function(){
+    var idx = jQuery('#plugin_snippets__idx');
+    if(idx.length == 0) return;
     snippets.attach(idx);
 });
 
